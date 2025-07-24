@@ -88,3 +88,29 @@ This command:
   - For parameters:
     - Total pool: `2 SOL`
     - Ticket: `0.1 SOL`
+
+- ✅ Lottery participation: **IN PROGRESS**
+  - Function enabling a participatant to buy X tickets of the pool
+
+---
+
+  ### ✅ The Flow for Buying Tickets
+
+    When a user wants to buy tickets using SOL :
+
+    1. Calculate how many tickets the user wants based on the amount of SOL they are sending.
+    2. Create a transaction that includes:
+    - A **SOL transfer** instruction from the user to the lottery account.
+    - A call to the \`\`\*\* instruction\*\* on the program, passing the number of tickets to purchase.
+
+    All of this must happen in **a single atomic transaction**.
+
+---
+
+### 🎯 Next step
+
+- We have a lotery running and a user want to participate
+  - They send SOL to the lottery.
+  - The smart contract checks that the lottery is still open.
+  - The backend (or a CPI call) mints a unique NFT tied to the lottery's collection.
+  - The NFT is sent directly to the player’s wallet as proof of participation.
