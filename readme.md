@@ -1,51 +1,90 @@
-# MVP Soloterie
 
-Projet de loterie web3 transparent
+# 🎰 MVP Soloterie
 
-## Fonctionnalités
+Transparent and automated Web3 lottery project on Solana.
 
--   Création d'une loterie par un utilisateur 
-- -     Formulaire de création
-- -     Conversion des infos en un smart contract solana 
-- - -       Calcul du nombre de NFT à minter et mint 
-- - - -         Backend créer une collection de X NFT Metaplex en gardant la mint autority
-- - - -         Backend enregistre l’adresse de la collection dans le smart contract
-- - -       Définition du moment de résolution de gagnant
-- - -       Définition de la méthode de tirage (chainlink?)
-- -     Déploiement du smartcontract sur le réseau
-- -     Stockage de l'adresse du smartcontract pour pouvoir afficher les infos sur le site
+---
 
-- Mise en vente des tickets de la loterie crée
-- -     L’utilisateur envoie des SOL pour acheter un ticket.
-- -     Récupération des informations de la loterie via le smartcontract 
-- -     Formulaire d'achat si loterie pas pleine
-- - -       Connexion metamask utilisateur 
-- - -       Envoi vers adresse smartcontract correspondant
-- - -       Vérification loterie toujours en cours et dispo
-- - -       Backend ou smart contract (via CPI Metaplex) mint un NFT dans la collection de la loterie.
-- - -       Le mint est directement envoyé à l'adresse de l'utilisateur
+## 🧩 Features
 
-- Tirage
-- -     Tirage au sort du NFT gagnant validation que chaque NFT appartient bien à la collection de la loterie (via Metaplex metadata).
-- -     Recherche du wallet possedant le NFT via solscan
-- -     Envoi des fonds sur le wallet
+### ✅ Lottery Creation
 
-### Notes
+- Creation form on the frontend
+- Automatic generation of a Solana smart contract with:
+  - Calculation of ticket count (`maxSol / ticketPrice`)
+  - Mint of X NFTs (one per ticket)
+    - Backend creates a Metaplex NFT collection
+    - Backend retains *mint authority*
+    - Collection address stored in the smart contract
+  - Definition of:
+    - Resolution time
+    - Draw method (e.g., Chainlink VRF)
+- Automatic deployment of the smart contract
+- Contract address stored to be displayed on frontend
 
-NFT car plus simple de gérer les échanges de propriété
-Mécanisme en cas de loterie incomplète à déterminer (annulation ? loterie partielle ?)
-Mécanisme d'envoi des fonds à compléter pour ne pas envoyer vers un wallet mort ?
+---
 
-## Documentation projet :
+### 🎟️ Ticket Sales
 
-### Utilisation
+- Users send SOL to purchase a ticket
+- Frontend fetches lottery info from the smart contract
+- Purchase form available if the lottery is active:
+  - Wallet connection (Phantom, Solflare…)
+  - Validation that the lottery is still open
+  - Mint of an NFT (ticket) via Metaplex (CPI or backend)
+  - NFT sent directly to the user's wallet
 
-- lancer le validateur local avec solana-test-validator
-- lancer le projet avec anchor test --skip-local-validator. Cette fontion : 
-- - Compile le programme solana
-- - Déplois le contrat sur le validateur local
-- - Execute les tests renseignés dans le fichier tests
+---
 
-### Avancée
+### 🏆 Lottery Draw
 
-- Initialisation de la loterie OK : projet compilé, déployé et test renvoit "Nombre de tickets : 20" avec les paramètres pool total : 2 SOL / ticket : 0.1 SOL
+- Random draw of the winning NFT from the collection
+- Validate each NFT belongs to the collection (via Metaplex metadata)
+- Look up wallet holding the winning NFT
+- Send funds to the winner's wallet
+
+---
+
+### 📌 Notes
+
+- Tickets are **NFTs** to ensure traceability and transparency
+- A **closure mechanism** is required if the lottery isn't full:
+  - Cancel & refund?
+  - Partial draw?
+- Final **payment mechanism** must ensure the recipient wallet is active
+
+---
+
+## 📚 Project Documentation
+
+### ▶️ Usage
+
+```bash
+# Start the local validator
+solana-test-validator
+```
+
+```bash
+# In another terminal, run the tests
+anchor test --skip-local-validator
+```
+
+This command:
+
+- Compiles the Solana program
+- Deploys the contract to the local validator
+- Executes test scripts from `/tests`
+
+---
+
+### 🚧 Current Progress
+
+- ✅ Lottery initialization: **WORKING**
+  - Smart contract compiled and deployed
+  - Test returns:  
+    ```
+    Nombre de tickets : 20
+    ```
+  - For parameters:
+    - Total pool: `2 SOL`
+    - Ticket: `0.1 SOL`
